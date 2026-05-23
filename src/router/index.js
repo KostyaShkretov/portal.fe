@@ -2,7 +2,8 @@ import ArticlePage from '@/pages/ArticlePage.vue'
 import LoginPage from '@/pages/LoginPage.vue'
 import MainPage from '@/pages/MainPage.vue'
 import RegisterPage from '@/pages/RegisterPage.vue'
-import { createRouter, createWebHistory } from 'vue-router' 
+import ArticlesPage from '@/pages/admin/ArticlesPage.vue'
+import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/authstore';
 
 const router = createRouter({
@@ -21,7 +22,7 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: LoginPage, 
+      component: LoginPage,
       meta: {
         guestOnly: true
       }
@@ -33,18 +34,35 @@ const router = createRouter({
       meta: {
         guestOnly: true
       }
+    },
+    {
+      path: '/admin/articles',
+      name: 'admin_articles',
+      component: ArticlesPage,
+      meta: {
+        authOnly: true
+      }
     }
   ],
 });
 
-router.beforeEach(function (to){
+router.beforeEach(function (to) {
+
   const authstore = useAuthStore();
-  if(to.meta.guestOnly) {
-      if(authstore.isAuth){
-        return {
-          name: 'main'
-        }
+  if (to.meta.guestOnly) {
+    if (authstore.isAuth) {
+      return {
+        name: 'main'
       }
+    }
+  }
+
+  if (to.meta.authOnly) {
+    if (!authstore.isAuth) {
+      return {
+        name: 'login'
+      }
+    }
   }
 });
 
