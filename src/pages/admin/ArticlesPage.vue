@@ -6,7 +6,9 @@
     </div>
     <div class="row my-3">
         <div class="col">
-            <button class="btn btn-success">Добавить статью</button>
+            <router-link :to="{ name: 'admin_articles_create' }" class="btn btn-success">
+                Добавить статью
+            </router-link>
         </div>
     </div>
     <div class="row">
@@ -29,7 +31,11 @@
                         <td> {{ article.title }} </td>
                         <td>
                             <div class="btn group">
-                                <button class="btn btn-outline-primary btn-sm">✏</button>
+                                <router-link :to="{
+                                    name: 'admin_articles_edit', params: {
+                                        id: article.id
+                                    }
+                                }" class="btn btn-outline-primary btn-sm">✏</router-link>
                                 <button @click="deleteArticle(article.id)"
                                     class="btn btn-outline-danger btn-sm">❌</button>
                             </div>
@@ -58,7 +64,7 @@ export default {
             this.articles = response.data;
         },
 
-        async deleteArticle(id) { 
+        async deleteArticle(id) {
             let answer = confirm('Действительно ли вы хотите удалить эту статью?');
             if (!answer) {
                 return;
